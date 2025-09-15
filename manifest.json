@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Bloco de Notas \u2014 MV3",
+  "description": "Um bloco de notas simples com m\u00faltiplas notas, autosave e exporta\u00e7\u00e3o, usando chrome.storage.",
+  "version": "1.0.0",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Bloco de Notas",
+    "default_popup": "src/popup/popup.html"
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "contextMenus"
+  ]
+}

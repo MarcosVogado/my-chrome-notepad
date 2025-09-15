@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco de Notas — Demo Web</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; background:#0f172a; color:#e5e7eb; }
+      .wrap { max-width: 900px; margin: 0 auto; padding: 24px; }
+      header { display:flex; align-items:center; gap:12px; }
+      header img { width:28px; height:28px; }
+      a.btn { display:inline-block; padding:10px 14px; background:#4f46e5; color:#fff; border-radius:8px; text-decoration:none; }
+      .grid { display:grid; grid-template-columns: 260px 1fr; gap:16px; margin-top:16px; }
+      .card { background:#111827; border:1px solid #1f2937; border-radius:12px; padding:12px; }
+      input, textarea { width:100%; background:#0b1220; border:1px solid #1f2937; color:#e5e7eb; border-radius:8px; padding:8px; }
+      ul{ list-style:none; padding:0; margin:0; }
+      li{ padding:8px; border-top:1px solid #1f2937; cursor:pointer; }
+      li.active{ background:#0b1220; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <img src="../src/assets/logo.svg" alt="logo" />
+        <h1>Bloco de Notas — Demo Web</h1>
+      </header>
+      <p>Esta é uma versão web simples para demonstrar a UI. A extensão usa <code>chrome.storage.sync</code>; aqui usamos <code>localStorage</code>.</p>
+      <div class="grid">
+        <div class="card">
+          <div style="display:flex; gap:8px;">
+            <button id="new" class="btn">＋ Nova</button>
+            <input id="q" placeholder="Buscar…" />
+          </div>
+          <ul id="list"></ul>
+        </div>
+        <div class="card">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input id="title" placeholder="Sem título" />
+            <button id="pin">📌</button>
+            <button id="exptxt">⬇︎ .txt</button>
+          </div>
+          <textarea id="content" rows="14" placeholder="Escreva aqui…"></textarea>
+          <div id="meta" style="color:#9ca3af; font-size:12px; margin-top:6px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2));
+      const KEY = "notesData_web";
+      const read = () => JSON.parse(localStorage.getItem(KEY) || '{"notes":[]}');
+      const write = (data) => localStorage.setItem(KEY, JSON.stringify(data));
+      let state = read();
+      const $ = (s) => document.querySelector(s);
+      const listEl = $('#list'); const qEl = $('#q'); const titleEl = $('#title'); const contentEl = $('#content'); const metaEl = $('#meta');
+      function sortNotes(a){ return [...a].sort((x,y)=> (y.pinned?1:0)-(x.pinned?1:0) || y.updatedAt - x.updatedAt); }
+      function getActive(){ return state.notes.find(n=>n.id===state.activeNoteId); }
+      function renderList(){
+        const q=(qEl.value||'').toLowerCase(); listEl.innerHTML='';
+        for(const n of sortNotes(state.notes).filter(n=>(n.title||'').toLowerCase().includes(q) || (n.content||'').toLowerCase().includes(q))){
+          const li=document.createElement('li');
+          li.className = n.id===state.activeNoteId?'active':'';
+          li.innerHTML = '<div style="font-weight:600;">'+(n.pinned?'📌 ':'')+(n.title||'(Sem título)')+'</div><div style="font-size:12px;color:#9ca3af;">'+((n.content||'').slice(0,60))+'</div>';
+          li.onclick=()=>{ state.activeNoteId=n.id; render(); };
+          listEl.appendChild(li);
+        }
+      }
+      function renderEditor(){
+        const n=getActive(); if(!n){ titleEl.value=''; contentEl.value=''; metaEl.textContent=''; return; }
+        titleEl.value=n.title||''; contentEl.value=n.content||'';
+        metaEl.textContent='Criada: '+new Date(n.createdAt).toLocaleString()+' • Atualizada: '+new Date(n.updatedAt).toLocaleString();
+      }
+      function render(){ renderList(); renderEditor(); write(state); }
+      document.getElementById('new').onclick=()=>{ const n={id:uuid(), title:'', content:'', createdAt:Date.now(), updatedAt:Date.now()}; state.notes.push(n); state.activeNoteId=n.id; render(); };
+      qEl.oninput=()=>renderList();
+      titleEl.oninput=()=>{ const n=getActive(); if(!n) return; n.title=titleEl.value; n.updatedAt=Date.now(); render(); };
+      contentEl.oninput=()=>{ const n=getActive(); if(!n) return; n.content=contentEl.value; n.updatedAt=Date.now(); render(); };
+      document.getElementById('pin').onclick=()=>{ const n=getActive(); if(!n) return; n.pinned=!n.pinned; n.updatedAt=Date.now(); render(); };
+      document.getElementById('exptxt').onclick=()=>{ const n=getActive(); if(!n) return; const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([n.content||''],{type:'text/plain'})); a.download=(n.title||'nota')+'.txt'; a.click(); };
+      if(!state.activeNoteId && state.notes[0]) state.activeNoteId=state.notes[0].id; render();
+    </script>
+  </body>
+</html>

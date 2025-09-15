@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco de Notas</title>
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <img src="../assets/logo.svg" alt="Logo" class="logo" />
+      <h1>Bloco de Notas</h1>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar" aria-label="Lista de notas">
+        <div class="sidebar-actions">
+          <button id="newNoteBtn" class="btn primary" aria-label="Nova nota">＋ Nova</button>
+          <input id="searchInput" type="text" placeholder="Buscar…" aria-label="Buscar notas" />
+        </div>
+        <ul id="notesList" class="notes-list" role="list"></ul>
+      </aside>
+
+      <section class="editor" aria-label="Editor de nota">
+        <div class="editor-header">
+          <input id="titleInput" class="title" type="text" placeholder="Sem título" aria-label="Título da nota" />
+          <div class="toolbar">
+            <button id="pinBtn" class="btn" title="Fixar/Desafixar">📌</button>
+            <button id="exportTxtBtn" class="btn" title="Exportar .txt">⬇︎ .txt</button>
+            <button id="exportJsonBtn" class="btn" title="Exportar .json">⬇︎ .json</button>
+            <label class="btn file-label" title="Importar .json">
+              ⬆︎ Importar
+              <input id="importJsonInput" type="file" accept="application/json" hidden />
+            </label>
+            <button id="deleteBtn" class="btn danger" title="Excluir nota">🗑</button>
+          </div>
+        </div>
+        <textarea id="contentInput" placeholder="Escreva aqui…" aria-label="Conteúdo da nota"></textarea>
+        <div class="meta" id="metaInfo" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="popup.js" defer></script>
+  </body>
+</html>
