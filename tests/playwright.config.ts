@@ -26,7 +26,9 @@ const config: PlaywrightTestConfig = {
         launchOptions: {
           args: [
             `--disable-extensions-except=${distPath}`,
-            `--load-extension=${distPath}`
+            `--load-extension=${distPath}`,
+            '--disable-web-security',
+            '--disable-features=VizDisplayCompositor'
           ],
           headless: false
         }
