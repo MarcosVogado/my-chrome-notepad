@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  e2e:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # Montar relatórios de teste para acesso local
+      - ./playwright-report:/app/playwright-report
+      # Montar a pasta dist para acesso local
+      - ./dist:/app/dist
+    environment:
+      # Configurações para execução em ambiente CI
+      - CI=true

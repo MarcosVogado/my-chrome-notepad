@@ -1,0 +1,25 @@
+{
+  "name": "my-chrome-notepad",
+  "version": "1.0.0",
+  "description": "Chrome extension notepad with E2E testing",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build-extension.mjs",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "docker:build": "docker compose build",
+    "docker:test": "docker compose run --rm e2e"
+  },
+  "keywords": [
+    "chrome-extension",
+    "notepad",
+    "playwright",
+    "e2e-testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "archiver": "^6.0.1"
+  }
+}
