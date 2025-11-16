@@ -1,16 +1,53 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Bloco de Notas PWA - Um bloco de notas simples com múltiplas notas, autosave e exportação" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bloco de Notas PWA - Gerencie suas notas com sincronização e offline" />
     <meta name="theme-color" content="#4f46e5" />
     <title>Bloco de Notas PWA</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <link rel="stylesheet" href="/src/styles/app.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <header class="app-header">
+      <img src="/icons/icon-192.png" alt="Logo" class="logo" />
+      <h1>Bloco de Notas</h1>
+      <div class="header-actions">
+        <span id="syncStatus" class="sync-status" data-testid="sync-status">●</span>
+        <button id="installBtn" class="btn install-btn" data-testid="install-btn" style="display: none;">Instalar App</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar" aria-label="Lista de notas">
+        <div class="sidebar-actions">
+          <button id="newNoteBtn" class="btn primary" aria-label="Nova nota" data-testid="new-note-btn">＋ Nova</button>
+          <input id="searchInput" type="text" placeholder="Buscar…" aria-label="Buscar notas" data-testid="search-input" />
+        </div>
+        <ul id="notesList" class="notes-list" role="list" data-testid="notes-list"></ul>
+      </aside>
+
+      <section class="editor" aria-label="Editor de nota">
+        <div class="editor-header">
+          <input id="titleInput" class="title" type="text" placeholder="Sem título" aria-label="Título da nota" data-testid="title-input" />
+          <div class="toolbar">
+            <button id="pinBtn" class="btn" title="Fixar/Desafixar" data-testid="pin-btn">📌</button>
+            <button id="exportTxtBtn" class="btn" title="Exportar .txt" data-testid="export-txt-btn">⬇︎ .txt</button>
+            <button id="exportJsonBtn" class="btn" title="Exportar .json" data-testid="export-json-btn">⬇︎ .json</button>
+            <label class="btn file-label" title="Importar .json">
+              ⬆︎ Importar
+              <input id="importJsonInput" type="file" accept="application/json" hidden data-testid="import-input" />
+            </label>
+            <button id="deleteBtn" class="btn danger" title="Excluir nota" data-testid="delete-btn">🗑</button>
+          </div>
+        </div>
+        <textarea id="contentInput" placeholder="Escreva aqui…" aria-label="Conteúdo da nota" data-testid="content-input"></textarea>
+        <div class="meta" id="metaInfo" aria-live="polite" data-testid="meta-info"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
 

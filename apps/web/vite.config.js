@@ -1,20 +1,20 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
-    react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icons/*.png'],
+      includeAssets: ['icons/*.png'],
       manifest: {
         name: 'Bloco de Notas PWA',
         short_name: 'NotepadPWA',
-        description: 'Um bloco de notas simples com múltiplas notas, autosave e exportação',
+        description: 'Um bloco de notas simples com múltiplas notas, autosave e sincronização',
         theme_color: '#4f46e5',
         background_color: '#0f172a',
         display: 'standalone',
+        orientation: 'portrait',
+        scope: '/',
         start_url: '/',
         icons: [
           {
@@ -49,16 +49,11 @@ export default defineConfig({
     })
   ],
   server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: process.env.VITE_API_URL || 'http://localhost:3000',
-        changeOrigin: true
-      }
-    }
+    port: 8080,
+    host: true
   },
-  build: {
-    outDir: 'dist'
+  preview: {
+    port: 8080
   }
 });
 

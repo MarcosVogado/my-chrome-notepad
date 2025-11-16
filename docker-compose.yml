@@ -1,31 +1,15 @@
-version: '3.8'
+version: '3'
 
 services:
-  api:
+  e2e:
     build:
-      context: ./apps/api
+      context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    container_name: notepad-api
+    volumes:
+      # Montar relatórios de teste para acesso local
+      - ./playwright-report:/app/playwright-report
+      # Montar a pasta dist para acesso local
+      - ./dist:/app/dist
     environment:
-      - PORT=3000
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  web:
-    build:
-      context: ./apps/web
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    container_name: notepad-web
-    environment:
-      - VITE_API_URL=http://localhost:3000
-    depends_on:
-      - api
-    restart: unless-stopped
+      # Configurações para execução em ambiente CI
+      - CI=true
