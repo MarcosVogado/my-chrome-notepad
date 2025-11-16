@@ -1,15 +1,29 @@
-version: '3'
+version: '3.8'
 
 services:
-  e2e:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      # Montar relatórios de teste para acesso local
-      - ./playwright-report:/app/playwright-report
-      # Montar a pasta dist para acesso local
-      - ./dist:/app/dist
+  api:
+    build: ./apps/api
+    ports:
+      - "3000:3000"
+    container_name: notepad-api
     environment:
-      # Configurações para execução em ambiente CI
-      - CI=true
+      - PORT=3000
+    networks:
+      - notepad-network
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        VITE_API_URL: http://localhost:3000
+    ports:
+      - "8080:80"
+    container_name: notepad-web
+    depends_on:
+      - api
+    networks:
+      - notepad-network
+
+networks:
+  notepad-network:
+    driver: bridge

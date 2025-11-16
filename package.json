@@ -1,25 +1,22 @@
 {
-  "name": "my-chrome-notepad",
+  "name": "notepad-pwa-monorepo",
   "version": "1.0.0",
-  "description": "Chrome extension notepad with E2E testing",
-  "main": "index.js",
+  "description": "Bloco de Notas PWA - Monorepo",
+  "private": true,
   "scripts": {
-    "build": "node scripts/build-extension.mjs",
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "docker:build": "docker compose build",
-    "docker:test": "docker compose run --rm e2e"
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:api": "cd apps/api && npm start",
+    "build:web": "cd apps/web && npm run build",
+    "test:web": "cd apps/web && npm test",
+    "test:e2e": "cd apps/web && npm run test:e2e",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
   },
   "keywords": [
-    "chrome-extension",
+    "pwa",
     "notepad",
-    "playwright",
-    "e2e-testing"
+    "monorepo"
   ],
   "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "archiver": "^6.0.1"
-  }
+  "license": "MIT"
 }
