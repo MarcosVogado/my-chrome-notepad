@@ -342,3 +342,4 @@ installBtn.addEventListener('click', async () => {
 load();
 setInterval(syncAll, 30000); // Sync every 30s
 
+

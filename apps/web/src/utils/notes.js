@@ -16,3 +16,4 @@ export function preview(text, max = 60) {
   return t.length > max ? t.slice(0, max - 1) + '…' : t;
 }
 
+
